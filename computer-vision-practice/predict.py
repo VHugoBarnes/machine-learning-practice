@@ -8,8 +8,8 @@ import os
 filepath = os.path.dirname(os.path.abspath(__file__))
 
 
-model_path = filepath + '/models/pneumiacnn'
 val_img_dir = filepath + '/chest_xray/val'
+model_path = filepath + '/models/pneumiacnn'
 
 # ImageDataGenerator proporciona un mecánismo para cargar conjuntos de datos tanto
 # pequeños o grandes
@@ -19,6 +19,7 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255.)
 # Crea un iterador de imágenes de entrenamiento que será cargado en un lote 
 # pequeño. Redimensiona todas las imágenes a un tamaño estándar.
 val_it = datagen.flow_from_directory(val_img_dir, batch_size=8, target_size=(1024,1024))
+print(type(val_it))
 
 # Carga y crea el modelo exacto, incluyendo los pesos y el optimizador
 model = tf.keras.models.load_model(model_path)
