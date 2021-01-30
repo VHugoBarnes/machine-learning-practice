@@ -9,15 +9,14 @@ import os
 
 filepath = os.path.dirname(os.path.abspath(__file__))
 
-img_path = filepath + '/example.jpeg'
+img_path = filepath + '/normal-2.jpeg'
 model_path = filepath + '/models/pneumiacnn'
 
 img = image.load_img(img_path, target_size=(1024,1024))
 numpy_img = np.array(img)
 numpy_img = np.expand_dims(numpy_img, axis=0)
 
-plt.imshow(img)
-plt.show()
+
 
 # print(type(numpy_img))
 # print(numpy_img.shape)
@@ -28,3 +27,16 @@ model = tf.keras.models.load_model(model_path)
 # Predice la clase de la imagen de entrada al modelo cargado
 predicted = model.predict(numpy_img)
 print('Predicted', predicted)
+
+label = ''
+comparison = [[0.,1.]] == predicted
+
+if (comparison.all()):
+    label = 'Con neumonía'
+else:
+    label = 'Sin neoumonía'
+
+print(label)
+plt.imshow(img)
+plt.xlabel(label)
+plt.show()
