@@ -1,23 +1,42 @@
 # How to calculate the cross entropy error
 import numpy as np
 
+# Number of samples we collect
 N = 100
+# Number of dimensions or features per sample
 D = 2
 
+# Matrix of data
+# Each row is a sample
+# Each column is the value of one feature in each sample
+# Here we create a matrix of random numbers from the standard normal distribution
 X = np.random.randn(N, D)
 
+# Center the first fifty points at (-2, -2)
 X[:50, :] = X[:50, :] - 2 * np.ones((50, D))
-X[50:, :] = X[50:, :] - 2 * np.ones((50,D))
+# Center the last fifty points at (2, 2)
+X[50:, :] = X[50:, :] + 2 * np.ones((50,D))
 
+# T: Target
+# Labels: first fifty are zero, last fifty are one
 T = np.array([0]*50 + [1]*50)
 
-ones = np.array([[1]*N]).T
+# Add a column of ones
+# ones = np.array([[1]*N]).T :: old
+# In this case, create a matrix of 100x1 filled with 1's
+ones = np.ones((N, 1))
+# Join a sequence of arrays along an existing axis
+# In this case, with axis=1, the X matrix is going to concatenate
+# at the end of the ones matrix giving a result like this:
+# [[1,1,1, 2.42]]
 Xb = np.concatenate((ones,X), axis=1)
 
+# w: weights
 # Randomly initialize the weights
 w = np.random.randn(D+1)
 
 # Calculate the model output
+# by calculating the dot product of Xb and w
 z = Xb.dot(w)
 
 def sigmoid(z):
@@ -25,9 +44,11 @@ def sigmoid(z):
 
 Y = sigmoid(z)
 
+# Calculate the cross entropy error
 def cross_entropy(T, Y):
     E = 0
 
+    # Making the summatory of the cross entropy function
     for i in range(N):
         if T[i] == 1:
             E -= np.log(Y[i])
@@ -38,7 +59,9 @@ def cross_entropy(T, Y):
 
 print(cross_entropy(T, Y))
 
+# try it with our closed-form solution
 w = np.array([0, 4, 4])
+# Calculate the model output
 z = Xb.dot(w)
 Y = sigmoid(z)
 
